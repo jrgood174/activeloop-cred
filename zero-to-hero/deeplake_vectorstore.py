@@ -7,8 +7,7 @@ from langchain.chains import RetrievalQA
 from langchain.agents import initialize_agent, Tool
 from langchain.agents import AgentType
 from dotenv import load_dotenv
-from langchain_core.tools import Tool
-from langchain_google_community import GoogleSearchAPIWrapper
+
 import os
 
 #%%
@@ -16,13 +15,11 @@ load_dotenv(override=True)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 ACTIVELOOP_TOKEN = os.getenv("ACTIVELOOP_TOKEN")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-GOOGLE_CSE_ID = os.getenv("GOOLE_CSE_ID")
 
 #%%
 
 # instantiate the LLM and embeddings models
-llm = OpenAI(model="gpt-3.5-turbo-instruct", temperature=0)
+llm = ChatOpenAI(model="gpt-3.5-turbo-instruct", temperature=0)
 embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
 
 # create our documents
