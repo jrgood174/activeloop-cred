@@ -7,12 +7,17 @@ from langchain.chains import RetrievalQA
 from langchain.agents import initialize_agent, Tool
 from langchain.agents import AgentType
 from dotenv import load_dotenv
+from langchain_core.tools import Tool
+from langchain_google_community import GoogleSearchAPIWrapper
 import os
+
 #%%
 load_dotenv(override=True)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 ACTIVELOOP_TOKEN = os.getenv("ACTIVELOOP_TOKEN")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GOOGLE_CSE_ID = os.getenv("GOOLE_CSE_ID")
 
 #%%
 
@@ -35,7 +40,7 @@ my_activeloop_dataset_name = "langchain_course_from_zero_to_hero"
 dataset_path = f"hub://{my_activeloop_org_id}/{my_activeloop_dataset_name}"
 db = DeepLake(dataset_path=dataset_path, embedding_function=embeddings)
 
-# add documents to our Deep Lake dataset
+# add documents to Deep Lake dataset
 db.add_documents(docs)
 
 #%%
@@ -105,3 +110,13 @@ agent = initialize_agent(
 response = agent.run("when was Michael Jordan born?")
 
 print(response)
+
+search = GoogleSearchAPIWrapper()
+
+tool = Tool(
+    name="google_search",
+    description="Search Google for recent results.",
+    func=search.run,
+)
+
+tool.run("Obama's first name")
